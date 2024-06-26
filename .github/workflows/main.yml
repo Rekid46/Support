@@ -40,7 +40,7 @@ jobs:
          api-key: ${{ env.CLOUDSMITH_API_KEY }}
          command: "push"
          format: "python"
-         owner: "interview-ranjan-singh"
+         owner: "Interview-Ranjan-Singh"
          repo: "support"
          republish: "true" # needed ONLY if version is not changing
          file: "mypackage/dist/*.tar.gz"
