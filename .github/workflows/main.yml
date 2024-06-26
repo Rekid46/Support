@@ -31,19 +31,27 @@ jobs:
          
      - name: List package files
        run: ls -l mypackage/dist/
-       
-     - name: Get OIDC token
-       run: |
-         value=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq '.value')
-         echo $value
-         token=$(curl -X POST -H "Content-Type: application/json" -d "{\"oidc_token\":$value, \"service_slug\":\"github-oidc\"}" https://api.cloudsmith.io/openid/interview-ranjan-singh/ | jq -r '.token')
-         echo $token
-         curl --request GET --url https://api.cloudsmith.io/v1/user/self/ --header "X-Api-Key:Bearer $token" --header 'accept: application/json'
-         echo "CLOUDSMITH_API_KEY=$token" >> $GITHUB_ENV
+
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v2
+       with:
+         name: python-package
+         path: mypackage/dist/*.tar.gz
+
          
  deploy:
+   needs: build
    runs-on: ubuntu-latest
    steps:
+     - name: Checkout repository
+       uses: actions/checkout@v2
+       
+     - name: Download Artifact
+       uses: actions/download-artifact@v2
+       with:
+         name: python-package
+         path: dist
+         
      - name: Get OIDC token
        run: |
          value=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq '.value')
@@ -63,4 +71,4 @@ jobs:
          owner: "interview-ranjan-singh"
          repo: "mypackage"
          republish: "true" # needed ONLY if version is not changing
-         file: "mypackage/dist/*.tar.gz"
+         file: "dist/*.tar.gz"
