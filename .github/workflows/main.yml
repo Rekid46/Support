@@ -41,6 +41,6 @@ jobs:
          command: "push"
          format: "python"
          owner: "interview-ranjan-singh"
-         repo: "support"
+         repo: "mypackage"
          #republish: "true" # needed ONLY if version is not changing
          file: "mypackage/dist/*.tar.gz"
