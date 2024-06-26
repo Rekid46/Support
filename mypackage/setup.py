@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
-
+with open("./README.md", "r") as fh:
+    long_description=fh.read()
 setup(
 
     name="mypackage",
@@ -14,7 +15,7 @@ setup(
 
     description="A simple example package",
 
-    long_description=open("./README.md").read(),
+    long_description=long_description,
 
     long_description_content_type="text/markdown",
 
